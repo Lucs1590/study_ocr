@@ -9,7 +9,7 @@ import numpy as np
 
 start_time = time()
 # tipando a leitura para os canais de ordem RGB
-imagem = Image.open('./images/arroz.jpg').convert('RGB')
+imagem = Image.open('./images/tabela.png').convert('RGB')
 
 # convertendo em um array editável de numpy[x, y, CANALS]
 npimagem = np.asarray(imagem).astype(np.uint8)  
