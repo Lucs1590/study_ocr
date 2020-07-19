@@ -19,11 +19,43 @@ def detect_edges(image):
         cv2.imwrite('houghlines.jpg', image)
         cv2.imshow('img', image)
         cv2.waitKey(0)
-        
 
+
+def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
+    # initialize the dimensions of the image to be resized and
+    # grab the image size
+    dim = None
+    (h, w) = image.shape[:2]
+
+    # if both the width and height are None, then return the
+    # original image
+    if width is None and height is None:
+        return image
+
+    # check to see if the width is None
+    if width is None:
+        # calculate the ratio of the height and construct the
+        # dimensions
+        r = height / float(h)
+        dim = (int(w * r), height)
+
+    # otherwise, the height is None
+    else:
+        # calculate the ratio of the width and construct the
+        # dimensions
+        r = width / float(w)
+        dim = (width, int(h * r))
+
+    # resize the image
+    resized = cv2.resize(image, dim, interpolation=inter)
+
+    # return the resized image
+    return resized
+
+
+# read image
 image = cv2.imread('images/tabela.png')
-detect_edges(image)
-
-
+# increase image 4 times
+image = image_resize(image, height=image.shape[0]*4)
 cv2.imshow('output', image)
 cv2.waitKey(0)
