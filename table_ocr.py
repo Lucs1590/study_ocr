@@ -6,22 +6,6 @@ from time import time
 from sklearn.cluster import KMeans
 
 
-def detect_edges(image):
-    edges = cv2.Canny(image, 50, 150, apertureSize=3)
-    cv2.imwrite('images/canny1.jpg', edges)
-    minLineLength = 100
-    lines = cv2.HoughLinesP(image=edges, rho=1, theta=np.pi/180, threshold=100,
-                            lines=np.array([]), minLineLength=minLineLength, maxLineGap=80)
-
-    a, b, c = lines.shape
-    for i in range(a):
-        cv2.line(image, (lines[i][0][0], lines[i][0][1]), (lines[i]
-                                                           [0][2], lines[i][0][3]), (0, 0, 255), 1, cv2.LINE_AA)
-        cv2.imwrite('houghlines.jpg', image)
-        cv2.imshow('img', image)
-        cv2.waitKey(0)
-
-
 def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     # initialize the dimensions of the image to be resized and
     # grab the image size
