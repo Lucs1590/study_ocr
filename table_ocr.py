@@ -67,9 +67,6 @@ def centroid_histogram(clt):
 
 def sort_colors(hist, centroids):
     aux = {}
-    final_val = {}
-    cores = []
-    percents = []
     for (percent, color) in zip(hist, centroids):
         aux[tuple(color.astype("uint8").tolist())] = percent
     aux = sorted(aux.items(), key=lambda x: x[1], reverse=True)
@@ -97,13 +94,13 @@ def remove_lines(image, colors):
         detected_h_lines, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     h_cnts = h_cnts[0] if len(h_cnts) == 2 else h_cnts[1]
     for c in h_cnts:
-        cv2.drawContours(image, [c], -1, colors[0], 2)
+        cv2.drawContours(image, [c], -1, colors[0][0], 2)
 
     v_cnts = cv2.findContours(
         detected_v_lines, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     v_cnts = v_cnts[0] if len(v_cnts) == 2 else v_cnts[1]
     for c in v_cnts:
-        cv2.drawContours(image, [c], -1, colors[0], 2)
+        cv2.drawContours(image, [c], -1, colors[0][0], 2)
 
     cv2.imwrite('tests/thresh1.png', thresh)
     # cv2.imwrite('tests/detected_lines0.png', detected_h_lines)
