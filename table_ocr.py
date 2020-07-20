@@ -3,6 +3,7 @@ import numpy as np
 
 from PIL import Image
 from time import time
+from sklearn.cluster import KMeans
 
 
 def detect_edges(image):
@@ -63,7 +64,35 @@ def dilate(img, kernel_size):
     return cv2.dilate(img, kernel, iterations=1)
 
 
-def remove_lines(image):
+def toKmeans(img, clusters):
+    img = img.reshape((img.shape[0] * img.shape[1], 3))
+    clt = KMeans(n_clusters=clusters)
+    clt.fit(img)
+    hist = centroid_histogram(clt)
+    colors = sort_colors(hist, clt.cluster_centers_)
+    return colors
+
+
+def centroid_histogram(clt):
+    numLabels = np.arange(0, len(np.unique(clt.labels_)) + 1)
+    (hist, _) = np.histogram(clt.labels_, bins=numLabels)
+    hist = hist.astype("float")
+    hist /= hist.sum()
+    return hist
+
+
+def sort_colors(hist, centroids):
+    aux = {}
+    final_val = {}
+    cores = []
+    percents = []
+    for (percent, color) in zip(hist, centroids):
+        aux[tuple(color.astype("uint8").tolist())] = percent
+    aux = sorted(aux.items(), key=lambda x: x[1], reverse=True)
+    return aux
+
+
+def remove_lines(image, colors):
     # Color changes
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     thresh_val, thresh = cv2.threshold(
@@ -84,24 +113,18 @@ def remove_lines(image):
         detected_h_lines, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     h_cnts = h_cnts[0] if len(h_cnts) == 2 else h_cnts[1]
     for c in h_cnts:
-        cv2.drawContours(image, [c], -1, (255, 255, 255), 2)
+        cv2.drawContours(image, [c], -1, colors[0], 2)
 
     v_cnts = cv2.findContours(
         detected_v_lines, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     v_cnts = v_cnts[0] if len(v_cnts) == 2 else v_cnts[1]
     for c in v_cnts:
-        cv2.drawContours(image, [c], -1, (255, 255, 255), 2)
-
-    # Repair image
-    repair_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
-    result = 255 - cv2.morphologyEx(255 - image,
-                                    cv2.MORPH_CLOSE, repair_kernel, iterations=1)
+        cv2.drawContours(image, [c], -1, colors[0], 2)
 
     cv2.imwrite('tests/thresh1.png', thresh)
     # cv2.imwrite('tests/detected_lines0.png', detected_h_lines)
     # cv2.imwrite('tests/detected_lines1.png', detected_v_lines)
     cv2.imwrite('tests/image.png', image)
-    # cv2.imwrite('tests/result1.png', result)
     cv2.waitKey()
 
 
@@ -109,8 +132,10 @@ def remove_lines(image):
 image = cv2.imread('images/tabela.png')
 # removing alpha chanel
 image = image[:, :, :3]
+# kmeans
+colors = toKmeans(image, 2)
 # remove lines
-remove_lines(image)
+remove_lines(image, colors)
 # increase image 4 times
 image = image_resize(image, height=image.shape[0]*4)
 
