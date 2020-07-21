@@ -109,8 +109,15 @@ def remove_lines(image, colors):
     cv2.waitKey()
 
 
+def open_close(self, method):
+    repair_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
+    result = 255 - cv2.morphologyEx(255 - image,
+                                    method, repair_kernel, iterations=1)
+    return result
+
+
 # read image
-image = cv2.imread('images/tabela.png')
+image = cv2.imread('images/1tabela.png')
 # removing alpha chanel
 image = image[:, :, :3]
 # kmeans
