@@ -126,7 +126,7 @@ colors = toKmeans(image, 2)
 remove_lines(image, colors)
 # increase image 4 times
 image = image_resize(image, height=image.shape[0]*4)
-# opening image
+# closing image
 image = open_close(cv2.MORPH_CLOSE)
 
 cv2.imwrite('tests/output1.png', image)
