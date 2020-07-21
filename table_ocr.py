@@ -109,8 +109,8 @@ def remove_lines(image, colors):
     cv2.waitKey()
 
 
-def open_close(self, method):
-    repair_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
+def open_close(method, kernel=2):
+    repair_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel, kernel))
     result = 255 - cv2.morphologyEx(255 - image,
                                     method, repair_kernel, iterations=1)
     return result
@@ -126,6 +126,8 @@ colors = toKmeans(image, 2)
 remove_lines(image, colors)
 # increase image 4 times
 image = image_resize(image, height=image.shape[0]*4)
+# opening image
+image = open_close(cv2.MORPH_CLOSE)
 
 cv2.imwrite('tests/output1.png', image)
 cv2.waitKey(0)
