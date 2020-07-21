@@ -116,6 +116,16 @@ def open_close(method, kernel=2):
     return result
 
 
+def clahe(image):
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+    l, a, b = cv2.split(lab)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    cl = clahe.apply(l)
+    limg = cv2.merge((cl,a,b))
+    final = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
+    cv2.imwrite('tests/clahe1.png', final)
+
+
 # read image
 image = cv2.imread('images/1tabela.png')
 # removing alpha chanel
@@ -128,6 +138,7 @@ remove_lines(image, colors)
 image = image_resize(image, height=image.shape[0]*4)
 # closing image
 image = open_close(cv2.MORPH_CLOSE)
+
 
 cv2.imwrite('tests/output1.png', image)
 cv2.waitKey(0)
