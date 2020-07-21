@@ -128,9 +128,10 @@ def remove_lines(image, colors):
     # cv2.imwrite('tests/detected_lines1.png', detected_v_lines)
     cv2.imwrite('tests/image.png', image)
     cv2.waitKey()
+    return image
 
 
-def open_close(method, kernel=2):
+def open_close(image, method, kernel=2):
     repair_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel, kernel))
     result = 255 - cv2.morphologyEx(255 - image,
                                     method, repair_kernel, iterations=1)
@@ -175,16 +176,22 @@ image = histo_optimization(image, 1, 0.5)
 # kmeans
 colors = to_kmeans(image, 2)
 # remove lines
-remove_lines(image, colors)
+image = remove_lines(image, colors)
 # increase image 4 times
 image = image_resize(image, height=image.shape[0]*4)
 # closing image
-image = open_close(cv2.MORPH_CLOSE)
+image = open_close(image, cv2.MORPH_CLOSE)
 # histogram and contrast optimization
 image = histo_optimization(image, 1, 0.5)
 # improve sharp
 image = unsharp_mask(image, (3, 3), 0.5, 1.5, 0)
+# dilate
+image = dilate(image, 1)
+# to gray
+image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+ret2, th2 = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+th2 = open_close(th2, cv2.MORPH_CLOSE, 1)
 
-
-cv2.imwrite('tests/output1.png', image)
+cv2.imwrite('tests/output.png', image)
+cv2.imwrite('tests/output1.png', th2)
 cv2.waitKey(0)
