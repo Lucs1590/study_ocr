@@ -102,7 +102,7 @@ def remove_lines(image, colors):
     for c in v_cnts:
         cv2.drawContours(image, [c], -1, colors[0][0], 2)
 
-    cv2.imwrite('tests/thresh1.png', thresh)
+    cv2.imwrite('tests/thresh.png', thresh)
     # cv2.imwrite('tests/detected_lines0.png', detected_h_lines)
     # cv2.imwrite('tests/detected_lines1.png', detected_v_lines)
     cv2.imwrite('tests/image.png', image)
@@ -123,13 +123,20 @@ def clahe(image):
     cl = clahe.apply(l)
     limg = cv2.merge((cl, a, b))
     final = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
-    cv2.imwrite('tests/clahe1.png', final)
+    return final
+
+
+def histo_optimization(image, alpha=1.5, beta=0):
+    adjusted = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
+    return adjusted
 
 
 # read image
-image = cv2.imread('images/1tabela.png')
+image = cv2.imread('images/2tabela.png')
 # removing alpha chanel
 image = image[:, :, :3]
+# histogram and contrast optimization
+image = histo_optimization(image, 1, 0.5)
 # kmeans
 colors = toKmeans(image, 2)
 # remove lines
@@ -138,7 +145,9 @@ remove_lines(image, colors)
 image = image_resize(image, height=image.shape[0]*4)
 # closing image
 image = open_close(cv2.MORPH_CLOSE)
+# histogram and contrast optimization
+image = histo_optimization(image, 1, 0.5)
 
 
-cv2.imwrite('tests/output1.png', image)
+cv2.imwrite('tests/output1.png', cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
 cv2.waitKey(0)
