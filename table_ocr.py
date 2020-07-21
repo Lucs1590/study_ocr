@@ -69,7 +69,7 @@ def dilate(img, kernel_size):
     return cv2.dilate(img, kernel, iterations=1)
 
 
-def toKmeans(img, clusters):
+def to_kmeans(img, clusters):
     img = img.reshape((img.shape[0] * img.shape[1], 3))
     clt = KMeans(n_clusters=clusters)
     clt.fit(img)
@@ -173,7 +173,7 @@ image = image[:, :, :3]
 # histogram and contrast optimization
 image = histo_optimization(image, 1, 0.5)
 # kmeans
-colors = toKmeans(image, 2)
+colors = to_kmeans(image, 2)
 # remove lines
 remove_lines(image, colors)
 # increase image 4 times
