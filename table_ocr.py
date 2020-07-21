@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import tempfile
 
 from PIL import Image
 from time import time
@@ -34,8 +35,28 @@ def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     # resize the image
     resized = cv2.resize(image, dim, interpolation=inter)
 
+    # set 300 dpi
+    resized = set_image_dpi(resized)
+
     # return the resized image
     return resized
+
+
+def set_image_dpi(image):
+    img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    im = Image.fromarray(img)
+
+    length_x, width_y = im.size
+    factor = min(1, float(1024.0 / length_x))
+
+    size = int(factor * length_x), int(factor * width_y)
+    im_resized = im.resize(size, Image.ANTIALIAS)
+    temp_file = tempfile.NamedTemporaryFile(suffix='.png')
+    temp_file = temp_file.name
+
+    im_resized.save(temp_file, dpi=(300, 300))
+
+    return np.asarray(im_resized)[:, :, ::-1]
 
 
 def erode(img, kernel_size):
@@ -149,5 +170,5 @@ image = open_close(cv2.MORPH_CLOSE)
 image = histo_optimization(image, 1, 0.5)
 
 
-cv2.imwrite('tests/output1.png', cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
+cv2.imwrite('tests/output1.png', image)
 cv2.waitKey(0)
