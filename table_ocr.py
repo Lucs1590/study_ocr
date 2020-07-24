@@ -148,7 +148,7 @@ def clahe(image):
     return final
 
 
-def histo_optimization(image, alpha=1.5, beta=0):
+def brightness_contrast_optimization(image, alpha=1.5, beta=0):
     adjusted = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
     return adjusted
 
@@ -168,11 +168,11 @@ def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
 
 
 # read image
-image = cv2.imread('images/2tabela.png')
+image = cv2.imread('tables/2tabela.png')
 # removing alpha chanel
 image = image[:, :, :3]
 # histogram and contrast optimization
-image = histo_optimization(image, 1, 0.5)
+image = brightness_contrast_optimization(image, 1, 0.5)
 # kmeans
 colors = to_kmeans(image, 2)
 # remove lines
@@ -182,7 +182,7 @@ image = image_resize(image, height=image.shape[0]*4)
 # closing image
 image = open_close(image, cv2.MORPH_CLOSE)
 # histogram and contrast optimization
-image = histo_optimization(image, 1, 0.5)
+image = brightness_contrast_optimization(image, 1, 0.5)
 # improve sharp
 image = unsharp_mask(image, (3, 3), 0.5, 1.5, 0)
 # dilate
