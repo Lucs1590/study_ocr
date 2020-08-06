@@ -1,0 +1,229 @@
+Informações Nutricionais Qtde.por porção* %VD**
+
+Valor energético 136kcal=571kj T%
+Carboidratos 199 6%
+Proteínas 3,59 5%
+Gorduras totais 5,39 10%
+Gorduras saturadas 240 Ti%
+Gorduras Trans zero q ”
+
+Gorduras Monoinsaturadas 209 “e
+
+Gorduras Polinsaturadas 0,69 “e
+
+Colesterol zero mg 0%
+Fibra alimentar 0,89 3%
+Sódio 210 mg Gp
+
+* spValores Diários com base em uma dieta de 2.000 kcal ou 8400 kj. Seus valores diários podem ser
+maiores ou menores dependendo de suas necessidades energéticas.
+** (36)VD não estabelecido.
+Execution Time: 3.446640729904175
+----------------------------------------
+Quantidade por porção
+Porção de 30 g (1 fatia)
+
+Valor Energético
+Carboidratos
+Proteínas
+
+Gorduras Totais
+Gorduras Saturadas
+Gorduras Trans
+Fibra Alimentar
+Sódio
+
+Cálcio
+
+101 kcal = 423kj
+0,49
+
+Tlg
+
+T,9g
+
+5,09
+
+0,39
+
+0
+
+263 mg
+
+228 mg
+
+AND (*)
+
+14
+23
+**
+0
+11
+23
+
+* % Valores Diários de Referência com base em uma dieta de 2.000 kcal ou 8.400 kJ.
+Seus valores diários podem ser maiores ou menores dependendo de suas
+
+necessidades energéticas.
+** VD não estabelecido.
+Execution Time: 2.9880690574645996
+----------------------------------------
+Informações Nutricionais Qtde.por porção* %VD**
+
+Valor energético 147kcal=605k] T%
+Carboidratos 199 6%
+Proteínas 209 3%
+Gorduras totais 729 13%
+Gorduras saturadas 379 17%
+Gorduras trans zero q “e
+
+Gorduras Monoinsaturadas 219 a
+
+Gorduras Polinsaturadas 0,59 “e
+
+Colesterol zero mg 0%
+Fibra alimentar 119 4%
+Sódio 90 mg “4%
+
+* soValores Diários com base em uma dieta de 2.000 kcal ou 8400 kJ. Seus valores diários podem ser
+maiores ou menores dependendo de suas necessidades energéticas.
+** (36)VD não estabelecido.
+Execution Time: 2.9931883811950684
+----------------------------------------
+INFORMAÇÃO NUTRICIONAL: Porção de 40 g (1 unidade)
+
+QUANTIDADE POR PORÇÃO % VD (8)
+Valor energético 97 kcal = 407 kJ 6
+Carboidratos 199 7
+Proteínas 259 3
+Gorduras totais 11g 5
+Gorduras saturadas 0g 5
+Gorduras trans Og ae
+Gorduras monoinsaturadas 069 a
+Gorduras poli-insaturadas 0,59 a
+Colesterol Omg o
+Fibra alimentar 359 14
+Sódio 183 mg 8
+
+*% Valores Diários com base em uma dieta de 2.000 kcal ou 8.400 kJ.
+Seus valores diários podem ser maiores ou menores dependendo de
+suas necessidades energéticas. ** VD não estabelecido.
+Execution Time: 3.0576083660125732
+----------------------------------------
+INFORMAÇÃO NUTRICIONAL
+Porção 66g (7 unidades)***
+
+Quantidade por porção ER]
+NETO a RO] | EMEA! Th
+RE RM LP
+Tu ipa 20g =
+ia iR E ER: 7
+CRS RES Lj a
+RR RS LILLE ER [o
+RE RR ETR TT um
+ELLIS ER] [1]
+
+Sódio 219mg E)
+Execution Time: 3.019456624984741
+----------------------------------------
+PORÇÃO DE 37G (4 COLHERES DE SOPA)
+
+QUANTIDADE POR PORÇÃO %v DC)
+Valor energético 145 kcal = 609 kJ 7
+Carboidratos 31g 10
+Proteínas 159 2
+Gorduras totais 1,79 3
+Gorduras saturadas 0,99 4
+Gorduras trans o -
+Fibra alimentar 0,69 2
+Sódio 148mg 6
+
+(1 % Valores Diários de Referência com base em uma dieta de 2.000 kcal ou 8400 kJ. Seus valores diários
+podem ser maiores ou menores dependendo de suas necessidades energéticas.
+(”) Valores Diários de Referência não estabelecidos.
+Execution Time: 3.359797954559326
+----------------------------------------
+iii Nil
+
+INFORMAÇÃO NUTRICIONAL: Porção de 40 g (1 unidade)
+
+ 
+
+QUANTIDADE POR PORÇÃO % VD (8)
+Valor energético 118 kcal = 496 kJ 6
+Carboidratos 20g 7
+Proteínas 269 3
+Gorduras totais 299 5
+Gorduras saturadas 14g 6
+Gorduras trans 0g ++
+Fibra alimentar 0,6g 2
+Sódio 207 mg 9
+
+*% Valores Diários com base em uma dieta de 2.000 kcal ou 8.400 kJ.
+Seus valores diários podem ser maiores ou menores dependendo de
+suas necessidades energéticas. ** VD não estabelecido.
+Execution Time: 3.4074244499206543
+----------------------------------------
+PORÇÃO DE 22 G (1 UNIDADE)
+
+QUANTIDADE POR PORÇÃO %VDC)
+Valor energético 11Okcal = 462 kJ 6
+Carboidratos 129
+
+Proteínas 349
+
+Gorduras totais 549 10
+Gorduras saturadas 119 5
+Gorduras trans o [dd]
+Fibra alimentar 109 4
+Sódio 23 mg 1
+
+(1 % Valores Diários de Referência com base em uma dieta de 2.000 kcal ou 8400 kJ. Seus valores diários
+podem ser maiores ou menores dependendo de suas necessidades energéticas.
+(9) Valores Diários de Referência não estabelecidos.
+Execution Time: 3.372760057449341
+----------------------------------------
+Informação/Información Nutricional
+Porção/Porción 30g (1 bombom/bombón)
+
+Quantidade por porção/Cantidad por porción %VD(*)
+Valor energético/Valor calorico 130kcal=546kJ 6
+Carboidratos/Carbohidrato 239 8
+Lactose/Lactosa 0,59 *
+Galactose/Galactosa 0,0g Re
+Gorduras totais/Grasa total 4,0g 7
+Gorduras saturadas/Grasa saturada 2,89 13
+Gorduras trans/Grasa trans 0,5g Rs
+Sódio/Sodio 21img 1
+
+[Não contém quantidade significativa de proteínas e fibra alimentar.” |
+(º) % Valores Diários de Referência com base em uma dicta de 2.000kcal ou 8.400]. Seus valores diários podem ser maiores ou
+menores dependendo de suas necessidades energéticas./% Valores Diarios de Referencia con base en una dieta de 2,000kcal
+o 8.400K]. Sus valores diarios pueden ser mayores o menores dependiendo de sus necesidades energéticas.
+
+** VD não estabelecido/VD no estabelecido
+Execution Time: 4.001138925552368
+----------------------------------------
+Informações Nutricionais Qtde.por porção* %VD**
+
+Valor energético 127hcal=533k) 6%
+Carboidratos 209 To
+Proteínas 379 5%
+rduras totais 3,8 7%
+g
+Gorduras saturadas 1,89 8%
+rduras trans zero e
+Go g
+orduras monoinsaturadas 1,5 “e
+q
+uras polinsaturadas 0,5 a
+pol g
+Colesterol zero mg 0%
+Fibra alimentar 109 4%
+Sódio 210 mg V%
+
+* qhValores Diários com base em uma dieta de 2.000 kcal ou 8400 kj. Seus volores diários podem ser
+maiores ou menores dependendo de suas necessidades energéticas.
+** (s6)VD não estabelecida.
+Execution Time: 2.974712610244751
+----------------------------------------
