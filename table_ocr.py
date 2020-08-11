@@ -4,6 +4,8 @@ import tempfile
 
 from PIL import Image
 from time import time
+
+from imutils.object_detection import non_max_suppression
 from sklearn.cluster import KMeans
 
 
@@ -26,11 +28,14 @@ def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
         dim = (int(w * r), height)
 
     # otherwise, the height is None
-    else:
+    elif height is None:
         # calculate the ratio of the width and construct the
         # dimensions
         r = width / float(w)
         dim = (width, int(h * r))
+
+    else:
+        dim = (640, 640)
 
     # resize the image
     resized = cv2.resize(image, dim, interpolation=inter)
@@ -167,6 +172,15 @@ def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
     return sharpened
 
 
+def run_EAST(net,):
+    blob = cv2.dnn.blobFromImage(
+        image, 1.0, (W, H), (123.68, 116.78, 103.94), swapRB=True, crop=False)
+    start = time()
+    net.setInput(blob)
+    (scores, geometry) = net.forward(layerNames)
+    return scores, geometry, time() - start
+
+
 # read image
 image = cv2.imread('tables/2tabela.png')
 # removing alpha chanel
@@ -191,6 +205,24 @@ image = dilate(image, 1)
 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 ret2, th2 = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 th2 = open_close(th2, cv2.MORPH_CLOSE, 1)
+
+""" EAST """
+# set image size
+W = th2.shape[0]
+H = th2.shape[1]
+
+# EAST size pattern
+ratio_wight = W / float(640)
+ratio_height = H / float(640)
+image = image_resize(th2, width=640, height=640)
+# define layers
+layerNames = ["feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3"]
+# load EAST
+net = cv2.dnn.readNet('frozen_east_text_detection.pb')
+# run EAST
+(scores, geometry, exec_time) = run_EAST(net,)
+# show timing information on text prediction
+print("[INFO] text detection took {:.6f} seconds".format(exec_time))
 
 cv2.imwrite('tests/output.png', image)
 cv2.imwrite('tests/output1.png', th2)
