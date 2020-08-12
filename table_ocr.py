@@ -172,13 +172,30 @@ def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
     return sharpened
 
 
+def bin_image(image):
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    ret2, th2 = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    th2 = open_close(th2, cv2.MORPH_CLOSE, 1)
+    return image, th2
+
+
+def get_size(image):
+    return image.shape[0], image.shape[1]
+
+
+def get_ratio(W, H):
+    return W / float(640),  H / float(640)
+
+
 def run_EAST(net, image):
+    layerNames = ["feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3"]
     blob = cv2.dnn.blobFromImage(
         image, 1.0, (W, H), (123.68, 116.78, 103.94), swapRB=True, crop=False)
     start = time()
     net.setInput(blob)
     (scores, geometry) = net.forward(layerNames)
-    return scores, geometry, time() - start
+    print("[INFO] text detection took {:.6f} seconds".format(time() - start))
+    return scores, geometry
 
 
 # read image
@@ -201,28 +218,20 @@ image = brightness_contrast_optimization(image, 1, 0.5)
 image = unsharp_mask(image, (3, 3), 0.5, 1.5, 0)
 # dilate
 image = dilate(image, 1)
-# to gray
-image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-ret2, th2 = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-th2 = open_close(th2, cv2.MORPH_CLOSE, 1)
+# to gray and B&W
+(image, th2) = bin_image(image)
 
 """ EAST """
 # set image size
-W = th2.shape[0]
-H = th2.shape[1]
-
-# EAST size pattern
-ratio_wight = W / float(640)
-ratio_height = H / float(640)
+(W, H) = get_size(th2)
+# set image ratio
+(ratio_wight, ratio_height) = get_ratio(W, H)
+# EAST resize pattern
 image = image_resize(th2, width=640, height=640)
-# define layers
-layerNames = ["feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3"]
-# load EAST
+# load EAST network
 net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 # run EAST
-(scores, geometry, exec_time) = run_EAST(net, image)
-# show timing information on text prediction
-print("[INFO] text detection took {:.6f} seconds".format(exec_time))
+(scores, geometry) = run_EAST(net, image)
 
 cv2.imwrite('tests/output.png', image)
 cv2.imwrite('tests/output1.png', th2)
