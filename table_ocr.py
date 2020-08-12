@@ -184,7 +184,7 @@ def get_size(image):
     return image.shape[0], image.shape[1]
 
 
-def get_ratio(W, H):
+def get_ratio(H, W):
     return W / float(640),  H / float(640)
 
 
@@ -236,6 +236,16 @@ def decode_predictions(scores, geometry, min_confidence):
     return (rects, confidences)
 
 
+def apply_boxes(boxes, image, ratio_width, ratio_height):
+    for (startX, startY, endX, endY) in boxes:
+        startX = int(startX * ratio_width)
+        startY = int(startY * ratio_height)
+        endX = int(endX * ratio_width)
+        endY = int(endY * ratio_height)
+        cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 0), 2)
+    return image
+
+
 # read image
 image = cv2.imread('tables/2tabela.png')
 # removing alpha chanel
@@ -261,22 +271,25 @@ image = dilate(image, 1)
 
 """ EAST """
 # copy image
-orig = th2.copy()
+original_image = th2.copy()
 # set image size
-(W, H) = get_size(th2)
+(H, W) = get_size(th2)
 # set image ratio
-(ratio_wight, ratio_height) = get_ratio(W, H)
+(ratio_height, ratio_width) = get_ratio(H, W)
 # EAST resize pattern
 image = image_resize(th2, width=640, height=640)
+# set image size
+(H, W) = get_size(th2)
 # load EAST network
 net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 # run EAST
 (scores, geometry) = run_EAST(net, image)
 # making rect and confidence limiar
-(rect, confidences) = decode_predictions(scores, geometry, 0.5)
+(rects, confidences) = decode_predictions(scores, geometry, 0.5)
 # removing overlaping boxes
 boxes = non_max_suppression(np.array(rects), probs=confidences)
+# applying bound boxes
+image = apply_boxes(boxes, original_image, ratio_width, ratio_height)
 
 cv2.imwrite('tests/output.png', image)
-cv2.imwrite('tests/output1.png', th2)
 cv2.waitKey(0)
