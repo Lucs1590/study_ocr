@@ -185,13 +185,13 @@ def get_size(image):
 
 
 def get_ratio(H, W):
-    return W / float(640),  H / float(640)
+    return H / float(640),  W / float(640)
 
 
-def run_EAST(net, image):
+def run_EAST(net, image, H, W):
     layerNames = ["feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3"]
     blob = cv2.dnn.blobFromImage(
-        image, 1.0, (W, H), (123.68, 116.78, 103.94), swapRB=True, crop=False)
+        image, 1.0, (H, W), (123.68, 116.78, 103.94), swapRB=True, crop=False)
     start = time()
     net.setInput(blob)
     (scores, geometry) = net.forward(layerNames)
@@ -236,7 +236,7 @@ def decode_predictions(scores, geometry, min_confidence):
     return (rects, confidences)
 
 
-def apply_boxes(boxes, image, ratio_width, ratio_height):
+def apply_boxes(boxes, image, ratio_height, ratio_width):
     for (startX, startY, endX, endY) in boxes:
         startX = int(startX * ratio_width)
         startY = int(startY * ratio_height)
@@ -247,7 +247,7 @@ def apply_boxes(boxes, image, ratio_width, ratio_height):
 
 
 # read image
-image = cv2.imread('tables/2tabela.png')
+image = cv2.imread('/home/brito/Documentos/Dev/east/images/example_05.jpg')
 # removing alpha chanel
 image = image[:, :, :3]
 # histogram and contrast optimization
@@ -277,19 +277,19 @@ original_image = th2.copy()
 # set image ratio
 (ratio_height, ratio_width) = get_ratio(H, W)
 # EAST resize pattern
-image = image_resize(th2, width=640, height=640)
+image = image_resize(th2, height=640,  width=640)
 # set image size
-(H, W) = get_size(th2)
+(H, W) = get_size(image)
 # load EAST network
 net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 # run EAST
-(scores, geometry) = run_EAST(net, image)
+(scores, geometry) = run_EAST(net, image, H, W)
 # making rect and confidence limiar
 (rects, confidences) = decode_predictions(scores, geometry, 0.5)
 # removing overlaping boxes
 boxes = non_max_suppression(np.array(rects), probs=confidences)
 # applying bound boxes
-image = apply_boxes(boxes, original_image, ratio_width, ratio_height)
+image = apply_boxes(boxes, original_image, ratio_height, ratio_width)
 
 cv2.imwrite('tests/output.png', image)
 cv2.waitKey(0)
