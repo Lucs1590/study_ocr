@@ -172,7 +172,7 @@ def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
     return sharpened
 
 
-def run_EAST(net,):
+def run_EAST(net, image):
     blob = cv2.dnn.blobFromImage(
         image, 1.0, (W, H), (123.68, 116.78, 103.94), swapRB=True, crop=False)
     start = time()
@@ -220,7 +220,7 @@ layerNames = ["feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3"]
 # load EAST
 net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 # run EAST
-(scores, geometry, exec_time) = run_EAST(net,)
+(scores, geometry, exec_time) = run_EAST(net, image)
 # show timing information on text prediction
 print("[INFO] text detection took {:.6f} seconds".format(exec_time))
 
