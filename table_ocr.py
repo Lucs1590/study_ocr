@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import tempfile
+import sys
 
 from PIL import Image
 from time import time
@@ -198,6 +199,43 @@ def run_EAST(net, image):
     return scores, geometry
 
 
+def decode_predictions(scores, geometry, min_confidence):
+    (numRows, numCols) = scores.shape[2:4]
+    rects = []
+    confidences = []
+
+    for y in range(0, numRows):
+        scoresData = scores[0, 0, y]
+        xData0 = geometry[0, 0, y]
+        xData1 = geometry[0, 1, y]
+        xData2 = geometry[0, 2, y]
+        xData3 = geometry[0, 3, y]
+        anglesData = geometry[0, 4, y]
+
+        for x in range(0, numCols):
+            if scoresData[x] < min_confidence:
+                continue
+
+            (offsetX, offsetY) = (x * 4.0, y * 4.0)
+
+            angle = anglesData[x]
+            cos = np.cos(angle)
+            sin = np.sin(angle)
+
+            h = xData0[x] + xData2[x]
+            w = xData1[x] + xData3[x]
+
+            endX = int(offsetX + (cos * xData1[x]) + (sin * xData2[x]))
+            endY = int(offsetY - (sin * xData1[x]) + (cos * xData2[x]))
+            startX = int(endX - w)
+            startY = int(endY - h)
+
+            rects.append((startX, startY, endX, endY))
+            confidences.append(scoresData[x])
+
+    return (rects, confidences)
+
+
 # read image
 image = cv2.imread('tables/2tabela.png')
 # removing alpha chanel
@@ -232,6 +270,9 @@ image = image_resize(th2, width=640, height=640)
 net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 # run EAST
 (scores, geometry) = run_EAST(net, image)
+# making rect and confidence limiar
+(rect, confidences) = decode_predictions(scores, geometry, 0.5)
+
 
 cv2.imwrite('tests/output.png', image)
 cv2.imwrite('tests/output1.png', th2)
