@@ -260,6 +260,8 @@ image = dilate(image, 1)
 (image, th2) = bin_image(image)
 
 """ EAST """
+# copy image
+orig = th2.copy()
 # set image size
 (W, H) = get_size(th2)
 # set image ratio
@@ -272,7 +274,8 @@ net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 (scores, geometry) = run_EAST(net, image)
 # making rect and confidence limiar
 (rect, confidences) = decode_predictions(scores, geometry, 0.5)
-
+# removing overlaping boxes
+boxes = non_max_suppression(np.array(rects), probs=confidences)
 
 cv2.imwrite('tests/output.png', image)
 cv2.imwrite('tests/output1.png', th2)
