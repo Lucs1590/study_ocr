@@ -236,18 +236,28 @@ def decode_predictions(scores, geometry, min_confidence):
     return (rects, confidences)
 
 
-def apply_boxes(boxes, image, ratio_height, ratio_width):
+def apply_boxes(boxes, image, ratio_height, ratio_width, H, W, padding):
     for (startX, startY, endX, endY) in boxes:
         startX = int(startX * ratio_width)
         startY = int(startY * ratio_height)
         endX = int(endX * ratio_width)
         endY = int(endY * ratio_height)
+
+        dX = int((endX - startX) * padding)
+        dY = int((endY - startY) * padding)
+
+        startX = max(0, startX - dX)
+        startY = max(0, startY - dY)
+        endX = min(W, endX + (dX * 2))
+        endY = min(H, endY + (dY * 2))
+        roi = image[startY:endY, startX:endX]
+
         cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 0), 2)
     return image
 
 
 # read image
-image = cv2.imread('/home/brito/Documentos/Dev/east/images/example_05.jpg')
+image = cv2.imread('tables/2tabela.png')
 # removing alpha chanel
 image = image[:, :, :3]
 # histogram and contrast optimization
@@ -273,9 +283,9 @@ image = dilate(image, 1)
 # copy image
 original_image = th2.copy()
 # set image size
-(H, W) = get_size(th2)
+(original_height, original_width) = get_size(th2)
 # set image ratio
-(ratio_height, ratio_width) = get_ratio(H, W)
+(ratio_height, ratio_width) = get_ratio(original_height, original_width)
 # EAST resize pattern
 image = image_resize(th2, height=640,  width=640)
 # set image size
@@ -289,7 +299,8 @@ net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 # removing overlaping boxes
 boxes = non_max_suppression(np.array(rects), probs=confidences)
 # applying bound boxes
-image = apply_boxes(boxes, original_image, ratio_height, ratio_width)
+image = apply_boxes(boxes, original_image, ratio_height,
+                    ratio_width, original_height, original_width, 0.06)
 
 cv2.imwrite('tests/output.png', image)
 cv2.waitKey(0)
