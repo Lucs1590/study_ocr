@@ -1,13 +1,13 @@
 import cv2
-import numpy as np
 import tempfile
-import sys
 
-from PIL import Image
-from time import time
+import numpy as np
+import pytesseract as ocr
 
 from imutils.object_detection import non_max_suppression
+from PIL import Image
 from sklearn.cluster import KMeans
+from time import time
 
 
 def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
@@ -237,6 +237,7 @@ def decode_predictions(scores, geometry, min_confidence):
 
 
 def apply_boxes(boxes, image, ratio_height, ratio_width, H, W, padding):
+    results = []
     for (startX, startY, endX, endY) in boxes:
         startX = int(startX * ratio_width)
         startY = int(startY * ratio_height)
@@ -252,8 +253,13 @@ def apply_boxes(boxes, image, ratio_height, ratio_width, H, W, padding):
         endY = min(H, endY + (dY * 2))
         roi = image[startY:endY, startX:endX]
 
+        config = ("-l por --oem 1 --psm 7")
+        text = ocr.image_to_string(roi, config=config)
+
+        results.append(((startX, startY, endX, endY), text))
         cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 0), 2)
-    return image
+
+    return results, image
 
 
 # read image
@@ -299,8 +305,8 @@ net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 # removing overlaping boxes
 boxes = non_max_suppression(np.array(rects), probs=confidences)
 # applying bound boxes
-image = apply_boxes(boxes, original_image, ratio_height,
-                    ratio_width, original_height, original_width, 0.06)
+results, image = apply_boxes(boxes, original_image, ratio_height,
+                             ratio_width, original_height, original_width, 0.06)
 
 cv2.imwrite('tests/output.png', image)
 cv2.waitKey(0)
