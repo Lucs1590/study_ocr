@@ -262,6 +262,10 @@ def apply_boxes(boxes, image, ratio_height, ratio_width, H, W, padding):
     return results, image
 
 
+def sort_boxes(boxes):
+    return boxes
+
+
 # read image
 image = cv2.imread('tables/2tabela.png')
 # removing alpha chanel
@@ -307,6 +311,7 @@ boxes = non_max_suppression(np.array(rects), probs=confidences)
 # applying bound boxes
 results, image = apply_boxes(boxes, original_image, ratio_height,
                              ratio_width, original_height, original_width, 0.06)
+sorted_results = sort_boxes(results)
 
 cv2.imwrite('tests/output.png', image)
 cv2.waitKey(0)
