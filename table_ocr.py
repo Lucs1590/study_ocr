@@ -263,7 +263,17 @@ def apply_boxes(boxes, image, ratio_height, ratio_width, H, W, padding):
 
 
 def sort_boxes(boxes):
-    return boxes
+    sorted_text = []
+    lines_values = sorted(list(set(map(lambda box: box[0][1], boxes))))
+    for value in lines_values:
+        words_of_line = sorted(
+            filter(lambda box: box[0][1] == value, boxes),
+            key=lambda box: box[0][0]
+        )
+        sorted_text.append(words_of_line)
+
+    flatten_sorted_text = [item for sublist in sorted_text for item in sublist]
+    return flatten_sorted_text
 
 
 # read image
@@ -308,9 +318,10 @@ net = cv2.dnn.readNet('frozen_east_text_detection.pb')
 (rects, confidences) = decode_predictions(scores, geometry, 0.5)
 # removing overlaping boxes
 boxes = non_max_suppression(np.array(rects), probs=confidences)
-# applying bound boxes
+# applying bounding boxes
 results, image = apply_boxes(boxes, original_image, ratio_height,
                              ratio_width, original_height, original_width, 0.06)
+# sort bouding boxes
 sorted_results = sort_boxes(results)
 
 cv2.imwrite('tests/output.png', image)
