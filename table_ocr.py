@@ -298,7 +298,7 @@ image = unsharp_mask(image, (3, 3), 0.5, 1.5, 0)
 image = dilate(image, 1)
 # to gray and B&W
 (image, th2) = bin_image(image)
-th2 = open_close(image, cv2.MORPH_CLOSE,1)
+th2 = open_close(image, cv2.MORPH_CLOSE, 1)
 
 
 """ EAST """
